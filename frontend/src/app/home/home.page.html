@@ -1,0 +1,101 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      ToDo App
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Group 7 TODO app</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="container">
+    <div>
+      <form>
+        <ion-item>
+          <ion-label position="floating">Task</ion-label>
+          <ion-input type="text" [(ngModel)]="taskName" name="name"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Priority</ion-label>
+          <ion-radio-group [(ngModel)]="priority" name="priority" class="radio-group">
+            <ion-radio value="high">High</ion-radio>
+            <ion-radio value="medium">Medium</ion-radio>
+            <ion-radio value="low">Low</ion-radio>
+          </ion-radio-group>
+        </ion-item>
+        <ion-item>
+          <ion-label>Has Sub Tasks?</ion-label>
+          <ion-checkbox name="subtasks" [(ngModel)]="hasSubTasks"></ion-checkbox>
+        </ion-item>
+      
+        <ion-item *ngIf="hasSubTasks">
+          <ion-label position="floating">Add Sub Task {{subTaskCount}}</ion-label>
+          <ion-input type="text" name="subtask" [(ngModel)]="subTaskName"></ion-input>
+          <ion-button type="button" (click)="subTaskAdded()">Add Sub Task</ion-button>
+        </ion-item>
+      
+        <ion-item *ngIf="hasSubTasks">
+          <ion-list>
+            <ion-item *ngFor="let subTask of subTaskNames; let i = index">
+              <ion-label>{{subTask}}</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-item>
+      </form>
+      
+      <div *ngIf="isEditing">
+        <ion-button (click)="updateRecord()">Update Task</ion-button>
+        <ion-button (click)="resetForm()">Cancel</ion-button>
+      </div>
+      
+      <div *ngIf="!isEditing">
+      <ion-button type="submit" (click)="addRecord()" [disabled]="checkFields()">Add Task</ion-button>
+      </div>
+    </div>
+    <div>
+      <div>
+        <ion-list>
+          <ion-item *ngFor="let task of tasks">
+            <ion-label>
+              <h2>{{task?.name}}</h2>
+              <p>Priority: {{task?.priority}}</p>
+              <div *ngIf="task?.subTasks?.length > 0">
+                <p>Sub Tasks:</p>
+                <ul>
+                  <li *ngFor="let subTask of task.subTasks">{{subTask}}</li>
+                </ul>
+              </div>
+              <div>
+                <ion-button (click)="deleteRecord(task?.name)" color="danger" shape="round" fill="clear">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill:currentColor;">
+                    <path d="M 10.806641 2 C 10.289641 2 9.7956875 2.2043125 9.4296875 2.5703125 L 9 3 L 4 3 A 1.0001 1.0001 0 1 0 4 5 L 20 5 A 1.0001 1.0001 0 1 0 20 3 L 15 3 L 14.570312 2.5703125 C 14.205312 2.2043125 13.710359 2 13.193359 2 L 10.806641 2 z M 4.3652344 7 L 5.8925781 20.263672 C 6.0245781 21.253672 6.877 22 7.875 22 L 16.123047 22 C 17.121047 22 17.974422 21.254859 18.107422 20.255859 L 19.634766 7 L 4.3652344 7 z"></path>
+                  </svg>
+                </ion-button>
+
+                <ion-button (click)="editRecord(task?.name)">
+                  <svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	 width="10px" height="10px" viewBox="0 0 528.899 528.899"
+	 xml:space="preserve">
+<g>
+	<path d="M328.883,89.125l107.59,107.589l-272.34,272.34L56.604,361.465L328.883,89.125z M518.113,63.177l-47.981-47.981
+		c-18.543-18.543-48.653-18.543-67.259,0l-45.961,45.961l107.59,107.59l53.611-53.611
+		C532.495,100.753,532.495,77.559,518.113,63.177z M0.3,512.69c-1.958,8.812,5.998,16.708,14.811,14.565l119.891-29.069
+		L27.473,390.597L0.3,512.69z"/>
+</g>
+</svg>
+                </ion-button>
+              </div>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </div>
+    </div>
+    <!-- list end -->
+  </div>
+
+</ion-content>
